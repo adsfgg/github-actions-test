@@ -7,9 +7,13 @@ jobs:
     steps:
       - name: Install steamcmd
         run: |
+          echo "Adding multiverse..."
           sudo add-apt-repository multiverse
+          echo "Adding 32bit arch"
           sudo dpkg --add-architecture i386
+          echo "Update"
           sudo apt update
+          echo "Install steamcmd"
           sudo apt install steamcmd
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
