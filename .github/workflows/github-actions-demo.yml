@@ -17,8 +17,7 @@ jobs:
         run: |
           steamcmd +exit
           ls -lah
-          ls -lah ~/.steam
-          ls -lah ~/.steam/steam
+          sudo ls -lah /root
       - name: Create user config
         run: |
           echo "${{ secrets.USER_CONFIG }}" | base64 --decode > ~/.steam/steam/config/config.vdf
