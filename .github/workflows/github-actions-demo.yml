@@ -13,6 +13,9 @@ jobs:
           echo steam steam/question select "I AGREE" | sudo debconf-set-selections
           echo steam steam/license note '' | sudo debconf-set-selections
           sudo apt install steamcmd -y
+      - name: Setup steamcmd
+        run: |
+          steamcmd +exit
       - name: Create user config
         run: |
           echo "${{ secrets.USER_CONFIG }}" | base64 --decode > ~/.steam/steam/config/config.vdf
