@@ -15,7 +15,7 @@ jobs:
           sudo apt install steamcmd -y
       - name: Setup steamcmd
         run: |
-          steamcmd +exit
+          steamcmd +login anonymous +quit
           ls -lah
           sudo ls -lah /root
       - name: Create user config
@@ -23,4 +23,4 @@ jobs:
           echo "${{ secrets.USER_CONFIG }}" | base64 --decode > ~/.steam/steam/config/config.vdf
       - name: Test steamcmd?
         run: |
-          steamcmd +login NS2BDT +exit
+          steamcmd +login NS2BDT +quit
