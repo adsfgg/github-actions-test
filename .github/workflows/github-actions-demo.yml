@@ -16,7 +16,9 @@ jobs:
       - name: Setup steamcmd
         run: |
           steamcmd +login anonymous +quit
+          pwd
           ls -lah
+          ls -lah /home/runner
           sudo ls -lah /root
       - name: Create user config
         run: |
