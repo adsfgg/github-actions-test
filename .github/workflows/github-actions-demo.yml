@@ -17,8 +17,10 @@ jobs:
         run: |
           steamcmd +login anonymous +quit
       - name: Create user config
+        env:
+          USER_CONFIG: ${{ secrets.USER_CONFIG }}
         run: |
-          echo "${{ secrets.USER_CONFIG }}" | base64 --decode > ~/Steam/config/config.vdf
+          base64 --decode <<< "$USER_CONFIG" > ~/Steam/config/config.vdf
       - name: Test steamcmd?
         run: |
           steamcmd +login NS2BDT +quit
