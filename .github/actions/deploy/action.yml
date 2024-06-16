@@ -1,7 +1,7 @@
 name: 'Hello World'
 description: 'Greet someone'
 inputs:
-  steamcmd-user-config:
+  steamcmd_user_config:
     description: 'Base64 encoded SteamCMD user config'
     required: true
   environment:
