@@ -1,28 +1,30 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+name: Main Push
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
 jobs:
-  lint-lua:
-    name: "Linter (Lua)"
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo "Linter installed"
-          echo "linting happening!"
+  # lint-lua:
+  #   name: "Linter (Lua)"
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - run: |
+  #         echo "Linter installed"
+  #         echo "linting happening!"
 
-  unittests-lua:
-    name: Unit Tests (Lua)
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo "installed"
-          echo "unittests happening!"
+  # unittests-lua:
+  #   name: Unit Tests (Lua)
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - run: |
+  #         echo "installed"
+  #         echo "unittests happening!"
 
   version-check:
     name: Check Version
-    needs:
-      - lint-lua
-      - unittests-lua
+    # needs:
+    #   - lint-lua
+    #   - unittests-lua
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -52,12 +54,40 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create --verify-tag --generate-notes $(jq -r .version build.json) 'build.zip#Test Name'
+          gh release create --verify-tag --generate-notes $(jq -r .version build.json) 'build.zip#Test-Name-$(jq -r .version build.json)'
 
   deploy:
     name: Deploy to Workshop (Dev)
-    needs: create-release
+    needs: version-check
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to dev
+        uses: './.github/actions/deploy'
+        with:
+          steamcmd_user_config: ${{ secrets.USER_CONFIG }}
+          environment: dev
+
+  deploy-playtest:
+    name: Deploy to Workshop (Playtest)
+    needs: version-check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to dev
+        uses: './.github/actions/deploy'
+        with:
+          steamcmd_user_config: ${{ secrets.USER_CONFIG }}
+          environment: dev
+
+  deploy-prod:
+    name: Deploy to Workshop (Playtest)
+    needs: version-check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v4
 
