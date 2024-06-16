@@ -59,7 +59,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-      - uses: './.github/actions/deploy'
+      - name: Deploy to dev
+        uses: './.github/actions/deploy'
         with:
           steamcmd-user-config: ${{ secrets.USER_CONFIG }}
           environment: dev
