@@ -56,10 +56,11 @@ jobs:
         run: |
           gh release create --verify-tag --generate-notes $(jq -r .version build.json) 'build.zip#Test-Name-$(jq -r .version build.json)'
 
-  deploy:
+  deploy-dev:
     name: Deploy to Workshop (Dev)
     needs: version-check
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - uses: actions/checkout@v4
 
@@ -73,7 +74,7 @@ jobs:
     name: Deploy to Workshop (Playtest)
     needs: version-check
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
+    environment: playtest
     steps:
       - uses: actions/checkout@v4
 
@@ -87,7 +88,7 @@ jobs:
     name: Deploy to Workshop (Playtest)
     needs: version-check
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
+    environment: prod
     steps:
       - uses: actions/checkout@v4
 
