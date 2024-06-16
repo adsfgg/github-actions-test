@@ -33,7 +33,7 @@ jobs:
             echo "Version ${VERSION} already exists"
             exit 1
           else
-            echo "Version ${VERSION}" is not tagged" 
+            echo "Version ${VERSION} is not tagged" 
             exit 0
           fi
       - name: Tag commit
