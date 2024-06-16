@@ -31,4 +31,4 @@ runs:
       uses: actions/github-script@v7
       with:
         script: |
-          core.setFailed("Version ${steps.get-version.outputs.version} already exists")
+          core.setFailed("Version ${{ steps.get-version.outputs.version }} already exists")
