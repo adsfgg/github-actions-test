@@ -6,6 +6,7 @@ runs:
     - name: Get version
       id: get-version
       run: echo "version=$(jq -r .version build.json)" >> $GITHUB_OUTPUT
+      shell: bash
 
     - name: Checkout main
       uses: actions/checkout@v4
@@ -13,8 +14,9 @@ runs:
         ref: 'main'
 
     - name: Check version isn't already tagged
+      shell: bash
       env:
-        - VERSION: ${{ steps.get-version.outputs.version }}
+        VERSION: ${{ steps.get-version.outputs.version }}
       run: |
         if [[ $(git tag -l ${VERSION}) ]]; then
           echo "Version ${VERSION} already exists"
