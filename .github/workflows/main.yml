@@ -9,6 +9,7 @@ jobs:
       - run: |
           echo "Linter installed"
           echo "linting happening!"
+
   unittests-lua:
     name: Unit Tests (Lua)
     runs-on: ubuntu-latest
@@ -16,26 +17,26 @@ jobs:
       - run: |
           echo "installed"
           echo "unittests happening!"
+
   version-check:
+    name: Check Version
+    needs:
+      - lint-lua
+      - unittests-lua
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: './.github/actions/version-check.yml'
+
+  create-release:
     name: Create Release
+    needs: version-check
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-      - name: Check version isn't already tagged
-        run: |
-          git fetch --all --tags --prune --prune-tags
-          git pull
-          VERSION="$(jq -r .version build.json)"
-          if [[ $(git tag -l ${VERSION}) ]]; then
-            echo "Version ${VERSION} already exists"
-            exit 1
-          else
-            echo "Version ${VERSION} is not tagged" 
-            exit 0
-          fi
       - name: Tag commit
         run: |
           git tag $(jq -r .version build.json)
@@ -50,12 +51,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create --verify-tag --generate-notes $(jq -r .version build.json) 'build.zip#Test Name'
+
   Explore-GitHub-Actions:
     name: Deploy to Workshop
-    needs: 
-      - version-check
-      - lint-lua
-      - unittests-lua
+    needs: create-release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -78,7 +77,7 @@ jobs:
           steamcmd +login anonymous +quit
       - name: Create user config
         env:
-          USER_CONFIG: ${{ secrets.USER_CONFIG }}
+          USER_CONFIG: ${{ secrets.USER_CONFIG}}
         run: |
           base64 --decode <<< "$USER_CONFIG" > ~/Steam/config/config.vdf
       - name: Test steamcmd?

@@ -1,0 +1,25 @@
+name: 'Version Check'
+description: 'Check version has not been tagged on main'
+runs:
+  using: "composite"
+  steps:
+    - name: Get version
+      id: get-version
+      run: echo "version=$(jq -r .version build.json)" >> $GITHUB_OUTPUT
+
+    - name: Checkout main
+      uses: actions/checkout@v4
+      with:
+        ref: 'main'
+
+    - name: Check version isn't already tagged
+      env:
+        - VERSION: ${{ steps.get-version.outputs.version }}
+      run: |
+        if [[ $(git tag -l ${VERSION}) ]]; then
+          echo "Version ${VERSION} already exists"
+          exit 1
+        else
+          echo "Version ${VERSION} is not tagged" 
+          exit 0
+        fi
