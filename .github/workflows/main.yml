@@ -35,18 +35,19 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Tag commit
         run: |
           git tag $(jq -r .version build.json)
           git push --tags
+
       - name: Create Release Build
         run: |
           mkdir build
           cp build.json README.md build
           zip build.zip build
+
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -58,8 +59,8 @@ jobs:
     needs: create-release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
       - name: Deploy to dev
         uses: './.github/actions/deploy'
         with:

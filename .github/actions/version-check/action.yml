@@ -4,7 +4,7 @@ runs:
   using: "composite"
   steps:
     - name: Get version
-      id: get-version
+      id: get_version
       run: |
         echo "version=$(jq -r .version build.json)" >> $GITHUB_OUTPUT
       shell: bash
@@ -15,20 +15,18 @@ runs:
         ref: 'main'
 
     - name: Get tags
-      id: get-tags
+      id: get_tags
       shell: bash
       env:
-        VERSION: ${{ steps.get-version.outputs.version }}
+        VERSION: ${{ steps.get_version.outputs.version }}
       run: |
         git fetch --all --tags --prune --prune-tags
         git pull
-        echo "envvar version=${VERSION}"
-        echo "tag-output=$(git tag -l ${VERSION})"
         echo "tag-output=$(git tag -l ${VERSION})" >> $GITHUB_OUTPUT
 
     - name: Check version isn't already tagged
-      if: steps.get-version.outputs.version == steps.get-tags.outputs.tag-output
+      if: steps.get_version.outputs.version == steps.get_tags.outputs.tag-output
       uses: actions/github-script@v7
       with:
         script: |
-          core.setFailed("Version ${{ steps.get-version.outputs.version }} already exists")
+          core.setFailed("Version ${{ steps.get_version.outputs.version }} already exists")
