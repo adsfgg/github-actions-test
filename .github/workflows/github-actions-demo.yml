@@ -3,12 +3,14 @@ run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 jobs:
   lint-lua:
+    name: "Linter (Lua)"
     runs-on: ubuntu-latest
     steps:
       - run: |
           echo "Linter installed"
           echo "linting happening!"
   unittests-lua:
+    name: Unit Tests (Lua)
     runs-on: ubuntu-latest
     steps:
       - run: |
@@ -30,6 +32,7 @@ jobs:
           git tag $(jq -r .version build.json)
           git push --tags
   Explore-GitHub-Actions:
+    name: Deploy to Workshop
     needs: 
       - version-check
       - lint-lua
