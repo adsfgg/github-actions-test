@@ -2,6 +2,28 @@ name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 jobs:
+  lint-lua:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install linter
+        run: |
+          echo "Linter installed"
+  unittests-lua:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install something
+        run: |
+          echo "installed"
+  version-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check version isn't already tagged
+        run: |
+          [[ $(git tag -l $(jq -r .version build.json)) ]] || exit 1
+      - name: Tag commit
+        run: |
+          git tag $(jq -r .version build.json)
+          git push --tags
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
