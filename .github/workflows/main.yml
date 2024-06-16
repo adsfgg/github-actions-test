@@ -64,5 +64,5 @@ jobs:
       - name: Deploy to dev
         uses: './.github/actions/deploy'
         with:
-          steamcmd-user-config: ${{ secrets.USER_CONFIG }}
+          steamcmd_user_config: ${{ secrets.USER_CONFIG }}
           environment: dev
