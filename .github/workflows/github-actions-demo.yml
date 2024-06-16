@@ -32,6 +32,13 @@ jobs:
         run: |
           git tag $(jq -r .version build.json)
           git push --tags
+      - name: Create Release Build
+        run: |
+          mkdir build
+          cp build.json README.md build
+      - name: Create release
+        run: |
+          gh release create $(jq -r .version build.json) --verify-tag --generate-notes
   Explore-GitHub-Actions:
     name: Deploy to Workshop
     needs: 
@@ -40,11 +47,13 @@ jobs:
       - unittests-lua
     runs-on: ubuntu-latest
     steps:
-      # - uses: actions/checkout@v4
-      # - run: |
-      #     pwd
-      #     ls -lah
-      #     cat build.json
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: test
+        run: |
+          pwd
+          ls -lah
+          cat build.json
       - name: Install steamcmd
         run: |
           sudo add-apt-repository multiverse
