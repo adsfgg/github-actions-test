@@ -27,6 +27,7 @@ jobs:
       - name: Check version isn't already tagged
         run: |
           [[ $(git tag -l $(jq -r .version build.json)) ]] && { echo "Version $(jq -r .version build.json) already exists"; exit 1; }
+          exit 0
       - name: Tag commit
         run: |
           git tag $(jq -r .version build.json)
