@@ -18,6 +18,8 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
       - name: Check version isn't already tagged
         run: |
           [[ $(git tag -l $(jq -r .version build.json)) ]] || exit 1
