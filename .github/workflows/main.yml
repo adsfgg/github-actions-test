@@ -26,7 +26,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Check version isn't already tagged
         run: |
-          git pull --all --tags --prune --prune-tags
+          git fetch --all --tags --prune --prune-tags
+          git pull
           VERSION="$(jq -r .version build.json)"
           if [[ $(git tag -l ${VERSION}) ]]; then
             echo "Version ${VERSION} already exists"
