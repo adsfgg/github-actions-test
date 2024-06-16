@@ -5,7 +5,9 @@ runs:
   steps:
     - name: Get version
       id: get-version
-      run: echo "version=$(jq -r .version build.json)" >> $GITHUB_OUTPUT
+      run: |
+        echo "version=$(jq -r .version build.json)"
+        echo "version=$(jq -r .version build.json)" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Checkout main
@@ -21,12 +23,12 @@ runs:
       run: |
         git fetch --all --tags --prune --prune-tags
         git pull
-        echo "version=${VERSION}"
+        echo "envvar version=${VERSION}"
         echo "tag-output=$(git tag -l ${VERSION})"
         echo "tag-output=$(git tag -l ${VERSION})" >> $GITHUB_OUTPUT
 
     - name: Check version isn't already tagged
-      if: ${{ steps.get-version.outputs.version }} == ${{ steps.get-tags.output.tag-output }}
+      if: steps.get-version.outputs.version == steps.get-tags.output.tag-output
       uses: actions/github-script@v7
       with:
         script: |
