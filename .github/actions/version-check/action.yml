@@ -13,17 +13,17 @@ runs:
       with:
         ref: 'main'
 
-    - name: Check version isn't already tagged
+    - name: Get tags
+      id: get-tags
       shell: bash
-      env:
-        VERSION: ${{ steps.get-version.outputs.version }}
       run: |
         git fetch --all --tags --prune --prune-tags
         git pull
-        if [[ $(git tag -l ${VERSION}) ]]; then
-          echo "Version ${VERSION} already exists"
-          echo "::error title=Duplicate Version::Version ${VERSION} already exists"
-        else
-          echo "Version ${VERSION} is not tagged" 
-          exit 0
-        fi
+        echo "tag-output=$(git tag -l ${VERSION})" >> $GITHUB_OUTPUT
+
+    - name: Check version isn't already tagged
+      if: ${{ steps.get-version.outputs.version == steps.get-tags.output.tag-output }}
+      uses: actions/github-script@v7
+      with:
+        script: |
+          core.setFailed("Version ${steps.get-version.output.version} already exists")

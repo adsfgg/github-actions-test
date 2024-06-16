@@ -52,34 +52,14 @@ jobs:
         run: |
           gh release create --verify-tag --generate-notes $(jq -r .version build.json) 'build.zip#Test Name'
 
-  Explore-GitHub-Actions:
-    name: Deploy to Workshop
+  deploy:
+    name: Deploy to Workshop (Dev)
     needs: create-release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-      - name: test
-        run: |
-          pwd
-          ls -lah
-          cat build.json
-      - name: Install steamcmd
-        run: |
-          sudo add-apt-repository multiverse
-          sudo dpkg --add-architecture i386
-          sudo apt update
-          echo steam steam/question select "I AGREE" | sudo debconf-set-selections
-          echo steam steam/license note '' | sudo debconf-set-selections
-          sudo apt install steamcmd -y
-      - name: Setup steamcmd
-        run: |
-          steamcmd +login anonymous +quit
-      - name: Create user config
-        env:
-          USER_CONFIG: ${{ secrets.USER_CONFIG}}
-        run: |
-          base64 --decode <<< "$USER_CONFIG" > ~/Steam/config/config.vdf
-      - name: Test steamcmd?
-        run: |
-          steamcmd +login NS2BDT +quit
+      - uses: './.github/actions/deploy'
+        with:
+          steamcmd-user-config: ${{ secrets.USER_CONFIG }}
+          environment: dev
