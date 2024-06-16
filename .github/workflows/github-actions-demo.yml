@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Check version isn't already tagged
         run: |
-          [[ $(git tag -l $(jq -r .version build.json)) ]] || exit 1
+          git tag -l $(jq -r .version build.json) || exit 1
       - name: Tag commit
         run: |
           git tag $(jq -r .version build.json)
