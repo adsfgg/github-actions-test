@@ -21,6 +21,7 @@ runs:
       run: |
         git fetch --all --tags --prune --prune-tags
         git pull
+        echo "tag-output=$(git tag -l ${VERSION})"
         echo "tag-output=$(git tag -l ${VERSION})" >> $GITHUB_OUTPUT
 
     - name: Check version isn't already tagged
