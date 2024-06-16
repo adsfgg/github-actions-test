@@ -18,6 +18,8 @@ runs:
       env:
         VERSION: ${{ steps.get-version.outputs.version }}
       run: |
+        git fetch --all --tags --prune --prune-tags
+        git pull
         if [[ $(git tag -l ${VERSION}) ]]; then
           echo "Version ${VERSION} already exists"
           exit 1
