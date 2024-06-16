@@ -27,11 +27,10 @@ jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
-      - name: test
-        run: |
+      - uses: actions/checkout@v4
+      - run: |
           pwd
           ls -lah
-          ls -lah ..
           cat build.json
       # - name: Install steamcmd
       #   run: |
