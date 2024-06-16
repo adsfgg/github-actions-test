@@ -2,47 +2,52 @@ name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 jobs:
-  lint-lua:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install linter
-        run: |
-          echo "Linter installed"
-  unittests-lua:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install something
-        run: |
-          echo "installed"
-  version-check:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check version isn't already tagged
-        run: |
-          [[ $(git tag -l $(jq -r .version build.json)) ]] || exit 1
-      - name: Tag commit
-        run: |
-          git tag $(jq -r .version build.json)
-          git push --tags
+  # lint-lua:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Install linter
+  #       run: |
+  #         echo "Linter installed"
+  # unittests-lua:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Install something
+  #       run: |
+  #         echo "installed"
+  # version-check:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Check version isn't already tagged
+  #       run: |
+  #         [[ $(git tag -l $(jq -r .version build.json)) ]] || exit 1
+  #     - name: Tag commit
+  #       run: |
+  #         git tag $(jq -r .version build.json)
+  #         git push --tags
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
-      - name: Install steamcmd
+      - name: test
         run: |
-          sudo add-apt-repository multiverse
-          sudo dpkg --add-architecture i386
-          sudo apt update
-          echo steam steam/question select "I AGREE" | sudo debconf-set-selections
-          echo steam steam/license note '' | sudo debconf-set-selections
-          sudo apt install steamcmd -y
-      - name: Setup steamcmd
-        run: |
-          steamcmd +login anonymous +quit
-      - name: Create user config
-        env:
-          USER_CONFIG: ${{ secrets.USER_CONFIG }}
-        run: |
-          base64 --decode <<< "$USER_CONFIG" > ~/Steam/config/config.vdf
-      - name: Test steamcmd?
-        run: |
-          steamcmd +login NS2BDT +quit
+          pwd
+          ls -lah
+          cat build.json
+      # - name: Install steamcmd
+      #   run: |
+      #     sudo add-apt-repository multiverse
+      #     sudo dpkg --add-architecture i386
+      #     sudo apt update
+      #     echo steam steam/question select "I AGREE" | sudo debconf-set-selections
+      #     echo steam steam/license note '' | sudo debconf-set-selections
+      #     sudo apt install steamcmd -y
+      # - name: Setup steamcmd
+      #   run: |
+      #     steamcmd +login anonymous +quit
+      # - name: Create user config
+      #   env:
+      #     USER_CONFIG: ${{ secrets.USER_CONFIG }}
+      #   run: |
+      #     base64 --decode <<< "$USER_CONFIG" > ~/Steam/config/config.vdf
+      # - name: Test steamcmd?
+      #   run: |
+      #     steamcmd +login NS2BDT +quit
