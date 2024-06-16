@@ -11,7 +11,7 @@ runs:
   using: "composite"
   steps:
     - name: Check environment
-      if: ${{ !contains(["prod", "playtest", "dev"], inputs.environment) }}
+      if: ${{ !contains(fromJSON('["prod", "playtest", "dev"]'), inputs.environment) }}
       uses: actions/github-script@v7
       with:
         script: |
@@ -38,4 +38,5 @@ runs:
         USER_CONFIG: ${{ inputs.steamcmd_user_config}}
 
     - name: Test steamcmd?
+      shell: bash
       run: steamcmd +login NS2BDT +quit
