@@ -57,7 +57,7 @@ jobs:
           gh release create --verify-tag --generate-notes $(jq -r .version build.json) 'build.zip#Test-Name-$(jq -r .version build.json)'
 
   deploy-dev:
-    name: Deploy to Workshop (Dev)
+    name: Deploy to Dev
     needs: version-check
     runs-on: ubuntu-latest
     environment: dev
@@ -71,7 +71,7 @@ jobs:
           environment: dev
 
   deploy-playtest:
-    name: Deploy to Workshop (Playtest)
+    name: Deploy to Playtest
     needs: version-check
     runs-on: ubuntu-latest
     environment: playtest
@@ -85,7 +85,7 @@ jobs:
           environment: dev
 
   deploy-prod:
-    name: Deploy to Workshop (Playtest)
+    name: Deploy to Prod
     needs: version-check
     runs-on: ubuntu-latest
     environment: prod
