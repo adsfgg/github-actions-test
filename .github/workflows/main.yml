@@ -58,7 +58,7 @@ jobs:
 
   deploy-dev:
     name: Deploy to Dev
-    needs: version-check
+    needs: create-release
     runs-on: ubuntu-latest
     environment: dev
     steps:
@@ -72,7 +72,7 @@ jobs:
 
   deploy-playtest:
     name: Deploy to Playtest
-    needs: version-check
+    needs: create-release
     runs-on: ubuntu-latest
     environment: playtest
     steps:
@@ -86,7 +86,7 @@ jobs:
 
   deploy-prod:
     name: Deploy to Prod
-    needs: version-check
+    needs: create-release
     runs-on: ubuntu-latest
     environment: prod
     steps:
