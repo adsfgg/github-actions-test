@@ -1,0 +1,11 @@
+name: Main Push
+on:
+  pull_request:
+    branches: main
+jobs:
+  version-check:
+    name: Check Version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: './.github/actions/version-check'
